@@ -1,14 +1,13 @@
 import {
   Body,
-  Controller,
-  Delete,
   Get,
+  Controller,
   HttpCode,
   HttpStatus,
-  Param,
   ParseUUIDPipe,
-  Patch,
   Post,
+  Param,
+  Delete,
   Put,
 } from '@nestjs/common';
 import {
@@ -20,81 +19,93 @@ import {
   ApiOkResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { TagDto, CreateTagDto, UpdateTagDto } from './dto/tag';
+import {
+  ApplicationGroupDto,
+  CreateApplicationGroupDto,
+  UpdateApplicationGroupDto,
+} from './dto/application-group';
 import { ApplicationGroupService } from './application-group.service';
 
 @Controller()
-@ApiTags('Tag')
-export class TagController {
-  constructor(private readonly tagService: ApplicationGroupService) {}
+@ApiTags('ApplicationGroup')
+export class ApplicationGroupController {
+  constructor(
+    private readonly applicationGroupService: ApplicationGroupService,
+  ) {}
 
-  @ApiOperation({ summary: 'Get tags' })
+  @ApiOperation({ summary: 'Get Application groups' })
   @ApiOkResponse({
-    description: 'Tags',
-    type: TagDto,
+    description: 'Application groups',
+    type: ApplicationGroupDto,
     isArray: true,
   })
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getTags(): Promise<Array<TagDto>> {
-    const tags = await this.tagService.getTags({});
+  async getApplicationGroups(): Promise<Array<ApplicationGroupDto>> {
+    const groups = await this.applicationGroupService.getApplicationGroups({});
 
-    return tags.map((tag) => new TagDto(tag));
+    return groups.map((group) => new ApplicationGroupDto(group));
   }
 
-  @ApiOperation({ summary: 'Create new tag' })
-  @ApiBody({ type: CreateTagDto })
+  @ApiOperation({ summary: 'Create new Application group' })
+  @ApiBody({ type: CreateApplicationGroupDto })
   @ApiCreatedResponse({
-    description: 'Created tag',
-    type: TagDto,
+    description: 'Created ApplicationGroup',
+    type: ApplicationGroupDto,
   })
   @ApiBadRequestResponse({ description: 'Validation error' })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async createTag(@Body() body: CreateTagDto): Promise<TagDto> {
-    const tag = await this.tagService.createTag(body);
+  async createApplicationGroup(
+    @Body() body: CreateApplicationGroupDto,
+  ): Promise<ApplicationGroupDto> {
+    const group = await this.applicationGroupService.createApplicationGroup(
+      body,
+    );
 
-    return new TagDto(tag);
+    return new ApplicationGroupDto(group);
   }
 
-  @ApiOperation({ summary: 'Get tag' })
+  @ApiOperation({ summary: 'Get Application group' })
   @ApiOkResponse({
-    description: 'Tag',
-    type: TagDto,
+    description: 'Application group',
+    type: ApplicationGroupDto,
   })
   @ApiBadRequestResponse({ description: 'Validation error' })
-  @ApiNotFoundResponse({ description: 'Tag does not exist' })
+  @ApiNotFoundResponse({ description: 'Application Group does not exist' })
   @HttpCode(HttpStatus.OK)
   @Get('/:id')
-  async getTag(@Param('id', ParseUUIDPipe) id: string) {
-    const tag = await this.tagService.getTag({ id });
+  async getApplicationGroup(@Param('id', ParseUUIDPipe) id: string) {
+    const group = await this.applicationGroupService.getApplicationGroup({
+      id,
+    });
 
-    return new TagDto(tag);
+    return new ApplicationGroupDto(group);
   }
 
-  @ApiOperation({ summary: 'Delete tag' })
+  @ApiOperation({ summary: 'Delete Application group' })
   @ApiOkResponse({
-    description: 'Tag deleted',
+    description: 'Group deleted',
   })
   @ApiBadRequestResponse({ description: 'Validation error' })
   @HttpCode(HttpStatus.OK)
   @Delete('/:id')
-  async deleteTag(@Param('id', ParseUUIDPipe) id: string) {
-    await this.tagService.deleteTag({ id });
+  async deleteApplicationGroup(@Param('id', ParseUUIDPipe) id: string) {
+    await this.applicationGroupService.deleteApplicationGroup({ id });
   }
 
-  @ApiOperation({ summary: 'Update tag' })
-  @ApiBody({ type: UpdateTagDto })
+  @ApiOperation({ summary: 'Update Application group' })
+  @ApiBody({ type: UpdateApplicationGroupDto })
   @ApiOkResponse({
-    description: 'Tag updated',
+    description: 'Application group updated',
   })
   @ApiBadRequestResponse({ description: 'Validation error' })
   @HttpCode(HttpStatus.OK)
   @Put('/:id')
-  async updateTag(
+  async updateApplicationGroup(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateTagDto,
+    @Body() body: UpdateApplicationGroupDto,
   ) {
-    await this.tagService.updateTag({ id, ...body });
+    await this.applicationGroupService.updateApplicationGroup({ id, ...body });
   }
 }

@@ -11,32 +11,20 @@ import { ApplicationGroupEntity } from './entities/application-group.entity';
 export class ApplicationGroupService {
   constructor(
     @InjectRepository(ApplicationGroupEntity)
-    private readonly ApplicationGroupRepository: Repository<ApplicationGroupEntity>,
+    private readonly applicationGroupRepository: Repository<ApplicationGroupEntity>,
   ) {}
 
-  createGroup(args: Omit<ApplicationGroup, 'id'>): Promise<ApplicationGroup> {
-    return this.ApplicationGroupRepository.save(
-      this.ApplicationGroupRepository.create(args),
+  createApplicationGroup(
+    args: Omit<ApplicationGroup, 'id'>,
+  ): Promise<ApplicationGroup> {
+    return this.applicationGroupRepository.save(
+      this.applicationGroupRepository.create(args),
     );
   }
 
-  findGroup(
-    args: Partial<ApplicationGroup>,
-  ): Promise<ApplicationGroup | undefined> {
-    return this.ApplicationGroupRepository.findOne(args);
-  }
-
-  async getGroup(args: Partial<ApplicationGroup>): Promise<ApplicationGroup> {
-    const tag = await this.findGroup(args);
-
-    if (!tag) {
-      throw new NotFoundException();
-    }
-
-    return tag;
-  }
-
-  getTags(args: ApplicationGroupFilter): Promise<Array<ApplicationGroup>> {
+  getApplicationGroups(
+    args: ApplicationGroupFilter,
+  ): Promise<Array<ApplicationGroup>> {
     const { ids } = args;
 
     const where = {};
@@ -45,19 +33,37 @@ export class ApplicationGroupService {
       Object.assign(where, { id: In(ids) });
     }
 
-    return this.ApplicationGroupRepository.find({ where });
+    return this.applicationGroupRepository.find({ where });
   }
 
-  async deleteGroup(args: Partial<ApplicationGroup>): Promise<void> {
-    await this.ApplicationGroupRepository.delete(args);
+  findApplicationGroup(
+    args: Partial<ApplicationGroup>,
+  ): Promise<ApplicationGroup | undefined> {
+    return this.applicationGroupRepository.findOne(args);
   }
 
-  async updateGroup(
+  async getApplicationGroup(
+    args: Partial<ApplicationGroup>,
+  ): Promise<ApplicationGroup> {
+    const applicationGroup = await this.findApplicationGroup(args);
+
+    if (!applicationGroup) {
+      throw new NotFoundException();
+    }
+
+    return applicationGroup;
+  }
+
+  async deleteApplicationGroup(args: Partial<ApplicationGroup>): Promise<void> {
+    await this.applicationGroupRepository.delete(args);
+  }
+
+  async updateApplicationGroup(
     args: Required<Pick<ApplicationGroup, 'id'>> &
       Partial<Omit<ApplicationGroup, 'id'>>,
   ): Promise<void> {
     const { id, ...rest } = args;
 
-    await this.ApplicationGroupRepository.update({ id }, rest);
+    await this.applicationGroupRepository.update({ id }, rest);
   }
 }
