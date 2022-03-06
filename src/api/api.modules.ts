@@ -9,11 +9,11 @@ import { ApplicationGroupModule } from './application-group/application-group.mo
     ApplicationModule,
     RouterModule.register([
       {
-        path: 'application',
+        path: 'applications',
         module: ApplicationModule,
       },
       {
-        path: 'application-group',
+        path: 'application-groups',
         module: ApplicationGroupModule,
       },
     ]),

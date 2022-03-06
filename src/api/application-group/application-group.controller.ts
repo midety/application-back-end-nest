@@ -27,7 +27,7 @@ import {
 import { ApplicationGroupService } from './application-group.service';
 
 @Controller()
-@ApiTags('ApplicationGroup')
+@ApiTags('Application Group')
 export class ApplicationGroupController {
   constructor(
     private readonly applicationGroupService: ApplicationGroupService,
