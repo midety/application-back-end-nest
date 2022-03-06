@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { RedocModule, RedocOptions } from 'nestjs-redoc';
 
 async function bootstrap() {
   const V1_PREFIX = '/api/v1';
@@ -11,13 +12,18 @@ async function bootstrap() {
   app.setGlobalPrefix(V1_PREFIX);
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Applications API')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+
+  const redocOptions: RedocOptions = {
+    sortPropsAlphabetically: true,
+    hideDownloadButton: false,
+    hideHostname: false,
+  };
+
+  await RedocModule.setup(`${V1_PREFIX}/docs`, app, document, redocOptions);
 
   await app.listen(3000);
 }

@@ -6,9 +6,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ApplicationGroupEntity } from '../../application-group/entities/application-group.entity';
+import { Application } from '../application.type';
 
 @Entity({ name: 'applications' })
-export class ApplicationEntity {
+export class ApplicationEntity implements Application {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   public readonly id: string;
 
@@ -26,5 +27,5 @@ export class ApplicationEntity {
     (applicationGroup) => applicationGroup.applications,
   )
   @JoinColumn({ name: 'application_group_id' })
-  applicationGroup: ApplicationEntity;
+  applicationGroup: ApplicationGroupEntity;
 }
