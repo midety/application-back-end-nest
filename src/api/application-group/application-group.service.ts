@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import {
-  ApplicationGroup,
-  ApplicationGroupFilter,
-} from './application-group.type';
+import { ApplicationGroup, Pagination } from './application-group.type';
 import { ApplicationGroupEntity } from './entities/application-group.entity';
 
 @Injectable()
@@ -22,18 +19,13 @@ export class ApplicationGroupService {
     );
   }
 
-  getApplicationGroups(
-    args: ApplicationGroupFilter,
-  ): Promise<Array<ApplicationGroup>> {
-    const { ids } = args;
+  getApplicationGroups(args: Pagination): Promise<Array<ApplicationGroup>> {
+    const { page, perPage } = args;
 
-    const where = {};
-
-    if (ids && ids.length) {
-      Object.assign(where, { id: In(ids) });
-    }
-
-    return this.applicationGroupRepository.find({ where });
+    return this.applicationGroupRepository.find({
+      take: perPage,
+      skip: perPage * (page - 1),
+    });
   }
 
   findApplicationGroup(
