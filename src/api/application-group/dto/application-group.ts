@@ -1,25 +1,13 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-  ApiPropertyOptions,
-} from '@nestjs/swagger';
-import {
-  IsString,
-  IsNumber,
-  MinLength,
-  Max,
-  IsOptional,
-  Min,
-} from 'class-validator';
-import { ApplicationGroup, Pagination } from '../application-group.type';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, MinLength, IsOptional } from 'class-validator';
+import { ApplicationGroup } from '../application-group.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
-  @ApiPropertyOptional({
+  @ApiProperty({
     required: true,
     minLength: 3,
     example: 'Group1',
   })
-  @IsOptional()
   @IsString()
   @MinLength(3)
   public readonly name: string;
@@ -45,7 +33,7 @@ export class ApplicationGroupDto implements ApplicationGroup {
   })
   public readonly id: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: 'Group1',
   })
   public readonly name: string;
@@ -53,28 +41,4 @@ export class ApplicationGroupDto implements ApplicationGroup {
   constructor(partial: Partial<ApplicationGroupDto>) {
     Object.assign(this, partial);
   }
-}
-
-export class PaginationApplicationGroupDto implements Pagination {
-  @ApiProperty({
-    required: true,
-    minimum: 1,
-    maximum: 50,
-    example: '1',
-  })
-  @IsNumber()
-  @Min(1)
-  @Max(50)
-  public readonly page: number;
-
-  @ApiPropertyOptional({
-    required: true,
-    minimum: 1,
-    maximum: 10,
-    example: '1',
-  })
-  @IsNumber()
-  @Min(1)
-  @Max(10)
-  public readonly perPage: number;
 }

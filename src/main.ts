@@ -8,11 +8,7 @@ async function bootstrap() {
   const V1_PREFIX = '/api/v1';
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(V1_PREFIX);
 
   const config = new DocumentBuilder()

@@ -4,7 +4,6 @@ import { In, Repository } from 'typeorm';
 import {
   ApplicationGroup,
   ApplicationGroupFilter,
-  Pagination,
 } from './application-group.type';
 import { ApplicationGroupEntity } from './entities/application-group.entity';
 
@@ -23,15 +22,18 @@ export class ApplicationGroupService {
     );
   }
 
-  async getApplicationGroups(
-    args: Pagination,
+  getApplicationGroups(
+    args: ApplicationGroupFilter,
   ): Promise<Array<ApplicationGroup>> {
-    const { page, perPage } = args;
+    const { ids } = args;
 
-    return this.applicationGroupRepository.find({
-      take: perPage,
-      skip: perPage * (page - 1),
-    });
+    const where = {};
+
+    if (ids && ids.length) {
+      Object.assign(where, { id: In(ids) });
+    }
+
+    return this.applicationGroupRepository.find({ where });
   }
 
   findApplicationGroup(
