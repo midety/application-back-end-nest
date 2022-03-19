@@ -9,8 +9,6 @@ import {
   Param,
   Delete,
   Put,
-  Query,
-  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -25,7 +23,6 @@ import {
   ApplicationGroupDto,
   CreateApplicationGroupDto,
   UpdateApplicationGroupDto,
-  PaginationApplicationGroupDto,
 } from './dto/application-group';
 import { ApplicationGroupService } from './application-group.service';
 
@@ -44,12 +41,8 @@ export class ApplicationGroupController {
   })
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getApplicationGroups(
-    @Query() paginate: PaginationApplicationGroupDto,
-  ): Promise<Array<ApplicationGroupDto>> {
-    const groups = await this.applicationGroupService.getApplicationGroups(
-      paginate,
-    );
+  async getApplicationGroups(): Promise<Array<ApplicationGroupDto>> {
+    const groups = await this.applicationGroupService.getApplicationGroups({});
 
     return groups.map((group) => new ApplicationGroupDto(group));
   }
