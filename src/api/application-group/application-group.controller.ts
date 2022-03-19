@@ -10,7 +10,6 @@ import {
   Delete,
   Put,
   Query,
-  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiTags,

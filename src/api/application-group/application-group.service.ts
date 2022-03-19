@@ -1,11 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import {
-  ApplicationGroup,
-  ApplicationGroupFilter,
-  Pagination,
-} from './application-group.type';
+import { ApplicationGroup, Pagination } from './application-group.type';
 import { ApplicationGroupEntity } from './entities/application-group.entity';
 
 @Injectable()

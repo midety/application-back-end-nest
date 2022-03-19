@@ -3,10 +3,6 @@ export type ApplicationGroup = {
   name: string;
 };
 
-export type ApplicationGroupFilter = {
-  ids?: Array<ApplicationGroup['id']>;
-};
-
 export type Pagination = {
   page: number;
   perPage: number;

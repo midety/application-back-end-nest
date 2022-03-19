@@ -45,7 +45,7 @@ export class PaginationApplicationGroupDto implements Pagination {
     required: true,
     minimum: 1,
     maximum: 50,
-    example: '1',
+    example: 1,
   })
   @IsNumber()
   @Min(1)
@@ -56,7 +56,7 @@ export class PaginationApplicationGroupDto implements Pagination {
     required: true,
     minimum: 1,
     maximum: 10,
-    example: '1',
+    example: 1,
   })
   @IsNumber()
   @Min(1)
