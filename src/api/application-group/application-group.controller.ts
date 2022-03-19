@@ -1,67 +1,118 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
 import {
-  ApplicationGroup,
-  ApplicationGroupFilter,
-  Pagination,
-} from './application-group.type';
-import { ApplicationGroupEntity } from './entities/application-group.entity';
+  Body,
+  Get,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  ParseUUIDPipe,
+  Post,
+  Param,
+  Delete,
+  Put,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
+import {
+  ApplicationGroupDto,
+  CreateApplicationGroupDto,
+  UpdateApplicationGroupDto,
+  PaginationApplicationGroupDto,
+} from './dto/application-group';
+import { ApplicationGroupService } from './application-group.service';
 
-@Injectable()
-export class ApplicationGroupService {
+@Controller()
+@ApiTags('Application Group')
+export class ApplicationGroupController {
   constructor(
-    @InjectRepository(ApplicationGroupEntity)
-    private readonly applicationGroupRepository: Repository<ApplicationGroupEntity>,
+    private readonly applicationGroupService: ApplicationGroupService,
   ) {}
 
-  createApplicationGroup(
-    args: Omit<ApplicationGroup, 'id'>,
-  ): Promise<ApplicationGroup> {
-    return this.applicationGroupRepository.save(
-      this.applicationGroupRepository.create(args),
-    );
-  }
-
+  @ApiOperation({ summary: 'Get Application groups' })
+  @ApiOkResponse({
+    description: 'Application groups',
+    type: ApplicationGroupDto,
+    isArray: true,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get()
   async getApplicationGroups(
-    args: Pagination,
-  ): Promise<Array<ApplicationGroup>> {
-    const { page, perPage } = args;
+    @Query() paginate: PaginationApplicationGroupDto,
+  ): Promise<Array<ApplicationGroupDto>> {
+    const groups = await this.applicationGroupService.getApplicationGroups(
+      paginate,
+    );
 
-    return this.applicationGroupRepository.find({
-      take: perPage,
-      skip: perPage * (page - 1),
+    return groups.map((group) => new ApplicationGroupDto(group));
+  }
+
+  @ApiOperation({ summary: 'Create new Application group' })
+  @ApiBody({ type: CreateApplicationGroupDto })
+  @ApiCreatedResponse({
+    description: 'Created ApplicationGroup',
+    type: ApplicationGroupDto,
+  })
+  @ApiBadRequestResponse({ description: 'Validation error' })
+  @HttpCode(HttpStatus.CREATED)
+  @Post()
+  async createApplicationGroup(
+    @Body() body: CreateApplicationGroupDto,
+  ): Promise<ApplicationGroupDto> {
+    const group = await this.applicationGroupService.createApplicationGroup(
+      body,
+    );
+
+    return new ApplicationGroupDto(group);
+  }
+
+  @ApiOperation({ summary: 'Get Application group' })
+  @ApiOkResponse({
+    description: 'Application group',
+    type: ApplicationGroupDto,
+  })
+  @ApiBadRequestResponse({ description: 'Validation error' })
+  @ApiNotFoundResponse({ description: 'Application Group does not exist' })
+  @HttpCode(HttpStatus.OK)
+  @Get('/:id')
+  async getApplicationGroup(@Param('id', ParseUUIDPipe) id: string) {
+    const group = await this.applicationGroupService.getApplicationGroup({
+      id,
     });
+
+    return new ApplicationGroupDto(group);
   }
 
-  findApplicationGroup(
-    args: Partial<ApplicationGroup>,
-  ): Promise<ApplicationGroup | undefined> {
-    return this.applicationGroupRepository.findOne(args);
+  @ApiOperation({ summary: 'Delete Application group' })
+  @ApiOkResponse({
+    description: 'Group deleted',
+  })
+  @ApiBadRequestResponse({ description: 'Validation error' })
+  @HttpCode(HttpStatus.OK)
+  @Delete('/:id')
+  async deleteApplicationGroup(@Param('id', ParseUUIDPipe) id: string) {
+    await this.applicationGroupService.deleteApplicationGroup({ id });
   }
 
-  async getApplicationGroup(
-    args: Partial<ApplicationGroup>,
-  ): Promise<ApplicationGroup> {
-    const applicationGroup = await this.findApplicationGroup(args);
-
-    if (!applicationGroup) {
-      throw new NotFoundException();
-    }
-
-    return applicationGroup;
-  }
-
-  async deleteApplicationGroup(args: Partial<ApplicationGroup>): Promise<void> {
-    await this.applicationGroupRepository.delete(args);
-  }
-
+  @ApiOperation({ summary: 'Update Application group' })
+  @ApiBody({ type: UpdateApplicationGroupDto })
+  @ApiOkResponse({
+    description: 'Application group updated',
+  })
+  @ApiBadRequestResponse({ description: 'Validation error' })
+  @HttpCode(HttpStatus.OK)
+  @Put('/:id')
   async updateApplicationGroup(
-    args: Required<Pick<ApplicationGroup, 'id'>> &
-      Partial<Omit<ApplicationGroup, 'id'>>,
-  ): Promise<void> {
-    const { id, ...rest } = args;
-
-    await this.applicationGroupRepository.update({ id }, rest);
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateApplicationGroupDto,
+  ) {
+    await this.applicationGroupService.updateApplicationGroup({ id, ...body });
   }
 }
