@@ -45,10 +45,10 @@ export class ApplicationGroupController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async getApplicationGroups(
-    @Query() paginate: PaginationApplicationGroupDto,
+    @Query() query: PaginationApplicationGroupDto,
   ): Promise<Array<ApplicationGroupDto>> {
     const groups = await this.applicationGroupService.getApplicationGroups(
-      paginate,
+      query,
     );
 
     return groups.map((group) => new ApplicationGroupDto(group));

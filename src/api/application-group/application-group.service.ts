@@ -23,9 +23,7 @@ export class ApplicationGroupService {
     );
   }
 
-  async getApplicationGroups(
-    args: Pagination,
-  ): Promise<Array<ApplicationGroup>> {
+  getApplicationGroups(args: Pagination): Promise<Array<ApplicationGroup>> {
     const { page, perPage } = args;
 
     return this.applicationGroupRepository.find({

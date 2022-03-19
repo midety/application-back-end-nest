@@ -1,8 +1,4 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-  ApiPropertyOptions,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNumber,
@@ -14,7 +10,7 @@ import {
 import { ApplicationGroup, Pagination } from '../application-group.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
-  @ApiPropertyOptional({
+  @ApiProperty({
     required: true,
     minLength: 3,
     example: 'Group1',
@@ -45,7 +41,7 @@ export class ApplicationGroupDto implements ApplicationGroup {
   })
   public readonly id: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: 'Group1',
   })
   public readonly name: string;
