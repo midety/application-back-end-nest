@@ -21,9 +21,17 @@ export class ApplicationGroupService {
   }
 
   getApplicationGroups(
-    args: Pagination & Sort,
+    args: Pagination & Sort<ApplicationGroup>,
   ): Promise<Array<ApplicationGroup>> {
-    const { page, perPage, order, orderBy } = args;
+    const DEFAULT_ORDER = 'ASC';
+    const DEFAULT_ORDER_BY = 'id';
+
+    const {
+      page,
+      perPage,
+      order = DEFAULT_ORDER,
+      orderBy = DEFAULT_ORDER_BY,
+    } = args;
 
     return this.applicationGroupRepository.find({
       take: perPage,

@@ -6,8 +6,15 @@ import {
   Max,
   Min,
   IsOptional,
+  IsEnum,
+  IsIn,
 } from 'class-validator';
-import { ApplicationGroup, Pagination, Sort } from '../application-group.type';
+import {
+  ApplicationGroup,
+  Order,
+  Pagination,
+  Sort,
+} from '../application-group.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
   @ApiProperty({
@@ -47,7 +54,9 @@ export class ApplicationGroupDto implements ApplicationGroup {
   }
 }
 
-export class GetApplicationGroupQueryDto implements Pagination, Sort {
+export class GetApplicationGroupsQueryDto
+  implements Pagination, Sort<ApplicationGroup>
+{
   @ApiProperty({
     required: true,
     minimum: 1,
@@ -71,20 +80,18 @@ export class GetApplicationGroupQueryDto implements Pagination, Sort {
   public readonly perPage: number;
 
   @ApiPropertyOptional({
-    minLength: 2,
-    example: 'ASC',
+    example: Order.ASC,
+    enum: Order,
   })
   @IsOptional()
-  @IsString()
-  @MinLength(2)
-  public readonly order?: string;
+  @IsEnum(Order)
+  public readonly order?: Order;
 
   @ApiPropertyOptional({
-    minLength: 2,
-    example: 'name column',
+    example: 'name',
+    enum: ['id', 'name'],
   })
-  @IsString()
+  @IsIn(['id', 'name'])
   @IsOptional()
-  @MinLength(2)
-  public readonly orderBy?: string;
+  public readonly orderBy?: 'id' | 'name';
 }

@@ -8,7 +8,12 @@ export type Pagination = {
   perPage: number;
 };
 
-export type Sort = {
-  order?: string;
-  orderBy?: string;
+export enum Order {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export type Sort<T> = {
+  order?: Order;
+  orderBy?: keyof T;
 };
