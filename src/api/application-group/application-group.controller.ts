@@ -24,7 +24,7 @@ import {
   ApplicationGroupDto,
   CreateApplicationGroupDto,
   UpdateApplicationGroupDto,
-  PaginationApplicationGroupDto,
+  GetApplicationGroupsQueryDto,
 } from './dto/application-group';
 import { ApplicationGroupService } from './application-group.service';
 
@@ -44,7 +44,7 @@ export class ApplicationGroupController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async getApplicationGroups(
-    @Query() query: PaginationApplicationGroupDto,
+    @Query() query: GetApplicationGroupsQueryDto,
   ): Promise<Array<ApplicationGroupDto>> {
     const groups = await this.applicationGroupService.getApplicationGroups(
       query,

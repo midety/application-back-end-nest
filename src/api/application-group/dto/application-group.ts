@@ -1,6 +1,20 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, MinLength, Max, Min } from 'class-validator';
-import { ApplicationGroup, Pagination } from '../application-group.type';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsString,
+  IsNumber,
+  MinLength,
+  Max,
+  Min,
+  IsOptional,
+  IsEnum,
+  IsIn,
+} from 'class-validator';
+import {
+  ApplicationGroup,
+  Order,
+  Pagination,
+  Sort,
+} from '../application-group.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
   @ApiProperty({
@@ -40,7 +54,9 @@ export class ApplicationGroupDto implements ApplicationGroup {
   }
 }
 
-export class PaginationApplicationGroupDto implements Pagination {
+export class GetApplicationGroupsQueryDto
+  implements Pagination, Sort<ApplicationGroup>
+{
   @ApiProperty({
     required: true,
     minimum: 1,
@@ -62,4 +78,20 @@ export class PaginationApplicationGroupDto implements Pagination {
   @Min(1)
   @Max(10)
   public readonly perPage: number;
+
+  @ApiPropertyOptional({
+    example: Order.ASC,
+    enum: Order,
+  })
+  @IsOptional()
+  @IsEnum(Order)
+  public readonly order?: Order;
+
+  @ApiPropertyOptional({
+    example: 'name',
+    enum: ['id', 'name'],
+  })
+  @IsIn(['id', 'name'])
+  @IsOptional()
+  public readonly orderBy?: 'id' | 'name';
 }
