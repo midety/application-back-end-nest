@@ -9,6 +9,7 @@ import {
   IsEnum,
   IsIn,
 } from 'class-validator';
+import { ApplicationDto } from 'src/api/application/dto/application';
 import {
   ApplicationGroup,
   Order,
@@ -94,4 +95,12 @@ export class GetApplicationGroupsQueryDto
   @IsIn(['id', 'name'])
   @IsOptional()
   public readonly orderBy?: 'id' | 'name';
+}
+
+export class ApplicationGroupFullDto extends ApplicationGroupDto {
+  @ApiProperty({
+    type: ApplicationDto,
+    isArray: true,
+  })
+  public readonly applications: [];
 }
