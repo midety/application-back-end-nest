@@ -34,6 +34,7 @@ export class ApplicationGroupService {
     } = args;
 
     return this.applicationGroupRepository.find({
+      relations: ['applications'],
       take: perPage,
       skip: perPage * (page - 1),
       order: {

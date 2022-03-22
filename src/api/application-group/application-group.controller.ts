@@ -25,6 +25,7 @@ import {
   CreateApplicationGroupDto,
   UpdateApplicationGroupDto,
   GetApplicationGroupsQueryDto,
+  ApplicationGroupFullDto,
 } from './dto/application-group';
 import { ApplicationGroupService } from './application-group.service';
 
@@ -38,19 +39,19 @@ export class ApplicationGroupController {
   @ApiOperation({ summary: 'Get Application groups' })
   @ApiOkResponse({
     description: 'Application groups',
-    type: ApplicationGroupDto,
+    type: ApplicationGroupFullDto,
     isArray: true,
   })
   @HttpCode(HttpStatus.OK)
   @Get()
   async getApplicationGroups(
     @Query() query: GetApplicationGroupsQueryDto,
-  ): Promise<Array<ApplicationGroupDto>> {
+  ): Promise<Array<ApplicationGroupFullDto>> {
     const groups = await this.applicationGroupService.getApplicationGroups(
       query,
     );
 
-    return groups.map((group) => new ApplicationGroupDto(group));
+    return groups.map((group) => new ApplicationGroupFullDto(group));
   }
 
   @ApiOperation({ summary: 'Create new Application group' })

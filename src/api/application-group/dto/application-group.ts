@@ -9,12 +9,14 @@ import {
   IsEnum,
   IsIn,
 } from 'class-validator';
+import { ApplicationDto } from 'src/api/application/dto/application';
 import {
   ApplicationGroup,
   Order,
   Pagination,
   Sort,
 } from '../application-group.type';
+import { Application } from 'src/api/application/application.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
   @ApiProperty({
@@ -94,4 +96,12 @@ export class GetApplicationGroupsQueryDto
   @IsIn(['id', 'name'])
   @IsOptional()
   public readonly orderBy?: 'id' | 'name';
+}
+
+export class ApplicationGroupFullDto extends ApplicationGroupDto {
+  @ApiProperty({
+    type: ApplicationDto,
+    isArray: true,
+  })
+  public readonly applications: Array<Application>;
 }
