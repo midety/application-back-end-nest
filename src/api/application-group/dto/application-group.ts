@@ -16,6 +16,7 @@ import {
   Pagination,
   Sort,
 } from '../application-group.type';
+import { Application } from 'src/api/application/application.type';
 
 export class CreateApplicationGroupDto implements Omit<ApplicationGroup, 'id'> {
   @ApiProperty({
@@ -102,5 +103,5 @@ export class ApplicationGroupFullDto extends ApplicationGroupDto {
     type: ApplicationDto,
     isArray: true,
   })
-  public readonly applications: [];
+  public readonly applications: Array<Application>;
 }
