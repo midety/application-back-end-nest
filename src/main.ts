@@ -6,13 +6,17 @@ import { RedocModule, RedocOptions } from 'nestjs-redoc';
 
 async function bootstrap() {
   const V1_PREFIX = '/api/v1';
+
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
 
   app.useGlobalPipes(
     new ValidationPipe({
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
   app.setGlobalPrefix(V1_PREFIX);
 
   const config = new DocumentBuilder()

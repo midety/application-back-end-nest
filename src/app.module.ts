@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfigModule } from './app-config/app-config.module';
-import { AppConfigService } from './app-config/app-config.service';
-import { ApiModule } from './api/api.modules';
+import { AppConfigService, AppConfigModule } from './app-config';
+import { ApiModule } from './/api/api.modules';
 
 @Module({
   imports: [
